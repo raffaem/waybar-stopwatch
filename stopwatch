@@ -5,19 +5,19 @@ import time
 import sys
 
 
-def printtime(h, m, s):
-    msg = '{"text":"󰚭 '
+def printtime(h=0, m=0, s=0, icon="󰚭"):
+    msg = f'{{"text":"{icon} '
     if h > 0:
         msg += f"{h:02d}:"
     if m > 0:
         msg += f"{m:02d}:"
-    msg += f"{s:02d}\"}}"
+    msg += f'{s:02d}"}}'
     print(msg)
 
 
 fp = "/tmp/waybar-stopwatch"
 if sys.argv[1] == "start":
-    if os.path.exists(fp):
+    try:
         with open(fp, "r") as fh:
             start = float(fh.read())
         s = time.time() - start
@@ -25,10 +25,9 @@ if sys.argv[1] == "start":
         s = int(s % 60)
         h = int(m // 60)
         m = int(m % 60)
-        printtime(h, m, s)
-    else:
-        h = m = s = 0
-        printtime(h, m, s)
+        printtime(h, m, s, "󱦟")
+    except Exception:
+        printtime()
 
 elif sys.argv[1] == "restart":
     if os.path.exists(fp):
