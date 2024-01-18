@@ -1,0 +1,36 @@
+#!/usr/bin/python
+
+import os
+import time
+import sys
+
+
+def printtime(h, m, s):
+    print(f'{{"text":"󰚭 {h:02d}:{m:02d}:{s:02d}"}}')
+
+
+fp = "/tmp/waybar-stopwatch"
+if sys.argv[1] == "start":
+    if os.path.exists(fp):
+        with open(fp, "r") as fh:
+            start = float(fh.read())
+        s = time.time() - start
+        m = int(s // 60)
+        s = int(s % 60)
+        h = int(m // 60)
+        m = int(m % 60)
+        printtime(h, m, s)
+    else:
+        h = m = s = 0
+        printtime(h, m, s)
+
+elif sys.argv[1] == "restart":
+    if os.path.exists(fp):
+        os.unlink(fp)
+    else:
+        with open(fp, "w") as fh:
+            t = time.time()
+            fh.write(f"{t:.2f}")
+
+else:
+    print('{"text": "ERROR", "tooltip":"error"}')
