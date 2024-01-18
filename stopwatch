@@ -6,7 +6,13 @@ import sys
 
 
 def printtime(h, m, s):
-    print(f'{{"text":"󰚭 {h:02d}:{m:02d}:{s:02d}"}}')
+    msg = '{"text":"󰚭 '
+    if h > 0:
+        msg += f"{h:02d}:"
+    if m > 0:
+        msg += f"{m:02d}:"
+    msg += f"{s:02d}\"}}"
+    print(msg)
 
 
 fp = "/tmp/waybar-stopwatch"
