@@ -2,6 +2,8 @@
 
 A simple stopwatch for waybar.
 
+![screenshot](./screenshot.png)
+
 To configure it:
 
 ```
