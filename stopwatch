@@ -1,8 +1,11 @@
 #!/usr/bin/python
+# Copyright 2024 Raffaele Mancuso
+# SPDX-License-Identifier: MIT
 
 import os
 import time
 import sys
+from pathlib import Path
 
 
 def printtime(h=0, m=0, s=0, icon="󰚭"):
@@ -12,22 +15,26 @@ def printtime(h=0, m=0, s=0, icon="󰚭"):
     if m > 0:
         msg += f"{m:02d}:"
     msg += f'{s:02d}"}}'
-    print(msg)
+    print(msg, flush=True)
 
 
-fp = "/tmp/waybar-stopwatch"
+fp = Path("/tmp/waybar-stopwatch")
 if sys.argv[1] == "start":
-    try:
-        with open(fp, "r") as fh:
-            start = float(fh.read())
-        s = time.time() - start
-        m = int(s // 60)
-        s = int(s % 60)
-        h = int(m // 60)
-        m = int(m % 60)
-        printtime(h, m, s, "󱦟")
-    except Exception:
-        printtime()
+    printtime()
+    while True:
+        if fp.is_file():
+            with open(fp, "r") as fh:
+                start = float(fh.read())
+            while fp.is_file():
+                s = time.time() - start
+                m = int(s // 60)
+                s = int(s % 60)
+                h = int(m // 60)
+                m = int(m % 60)
+                printtime(h, m, s, "󱦟")
+                time.sleep(1)
+            printtime()
+        time.sleep(1)
 
 elif sys.argv[1] == "restart":
     if os.path.exists(fp):
